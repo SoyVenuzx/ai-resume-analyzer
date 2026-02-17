@@ -1,3 +1,6 @@
+import ATS from "@/components/ATS";
+import Details from "@/components/Details";
+import Summary from "@/components/Summary";
 import { usePuterStore } from "@/lib/puter";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -16,12 +19,22 @@ export default function Resume() {
   const [resumeData, setResumeData] = useState({
     imageUrl: "",
     resumeUrl: "",
-    feedback: {},
+    feedback: null as Feedback | null,
   });
 
   const navigate = useNavigate();
 
   const { imageUrl, resumeUrl, feedback } = resumeData;
+
+  // const isFeedbackReady =
+  //   feedback &&
+  //   typeof feedback.overallScore === "number" &&
+  //   feedback.ATS?.score !== undefined &&
+  //   Array.isArray(feedback.ATS?.tips) &&
+  //   Array.isArray(feedback.toneAndStyle?.tips) &&
+  //   Array.isArray(feedback.content?.tips) &&
+  //   Array.isArray(feedback.structure?.tips) &&
+  //   Array.isArray(feedback.skills?.tips);
 
   useEffect(() => {
     if (!isLoading && !auth.isAuthenticated)
@@ -50,14 +63,11 @@ export default function Resume() {
       const imageUrl = URL.createObjectURL(imageBlob);
       setResumeData((prev) => ({ ...prev, imageUrl }));
 
-      setResumeData((prev) => ({ ...prev, feedback: data.feedback }));
-
-      console.log({ resumeUrl, imageUrl, feedback });
+      console.log({ feedback: data.feedback });
+      setResumeData((prev) => ({ ...prev, feedback: data.feedback ?? null }));
     };
 
     loadResume();
-
-    console.log({ resumeUrl, imageUrl, feedback });
   }, [id]);
 
   useEffect(() => {
@@ -66,6 +76,7 @@ export default function Resume() {
     };
   }, [imageUrl]);
 
+  console.log({ feedback, resumeUrl, imageUrl });
   return (
     <main className="pt-0!">
       <nav className="resume-nav">
@@ -98,7 +109,12 @@ export default function Resume() {
 
           {feedback ? (
             <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
-              Summary ATS Details
+              <Summary feedback={feedback} />
+              <ATS
+                score={feedback.ATS.score || 0}
+                suggestions={feedback.ATS.tips}
+              />
+              <Details feedback={feedback} />
             </div>
           ) : (
             <img src="/images/resume-scan-2.gif" className="w-full" />

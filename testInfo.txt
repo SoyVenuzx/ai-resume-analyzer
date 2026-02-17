@@ -1,0 +1,11 @@
+TechNova Solutions
+FullStack Web Developer
+
+Develop and maintain web applications using modern frontend frameworks
+Design and implement RESTful APIs
+Work with relational and non-relational databases
+Write clean, maintainable, and testable code
+Participate in code reviews
+Optimize applications for performance and scalability
+Collaborate with UI/UX designers and product managers
+Deploy applications to cloud environments
